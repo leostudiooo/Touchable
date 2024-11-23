@@ -6,24 +6,37 @@
 //
 
 import SwiftUI
+import Charts
 
 struct PlottingView: View {
     @ObservedObject var trackpadListener: TrackpadListener
     
-    var body: some View {
-        GeometryReader { geometry in
-            Path { path in
-                let width = geometry.size.width
-                let height = geometry.size.height
-//                let maxPressure = trackpadListener.pressureValues.max() ?? 1
-                let maxPressure = 1.0
-                let points = trackpadListener.pressureValues.enumerated().map { index, pressure in
-                    CGPoint(x: CGFloat(index) * width / CGFloat(trackpadListener.pressureValues.count), y: height - (pressure / maxPressure * height))
-                }
-                path.addLines(points)
-            }
-            .stroke(.blue, lineWidth: 2)
+    private var xDomain: ClosedRange<Double> {
+        let points = trackpadListener.pressurePoints
+        if let first = points.first?.id, let last = points.last?.id {
+            return Double(first)...Double(last)
         }
+        return 0...100
+    }
+    
+    var body: some View {
+        Chart {
+            ForEach(trackpadListener.pressurePoints) { point in
+                LineMark(
+                    x: .value("Sample", point.id),
+                    y: .value("Pressure", point.pressure)
+                )
+            }
+        }
+        .chartYScale(domain: 0...1)
+        .chartXScale(domain: xDomain)
+        .chartYAxis {
+            AxisMarks(position: .leading)
+        }
+        .chartXAxis {
+            AxisMarks(position: .bottom)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
