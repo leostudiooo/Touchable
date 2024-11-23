@@ -30,16 +30,16 @@ struct ContentView: View {
                         Text("[\(trackpadListener.pointerPosition.x, specifier: "%.2f"), \(trackpadListener.pointerPosition.y, specifier: "%.2f")]")
                             .fontDesign(.monospaced)
                     }
-                    .frame(minWidth: 100, idealWidth: 200, maxWidth: 200, minHeight: 300, idealHeight: 300)
+                    .frame(minWidth: 100, idealWidth: 150, maxWidth: 150, minHeight: 300, idealHeight: 300)
                     .padding(20)
                     // Plotting
                     PlottingView(trackpadListener: trackpadListener)
-                        .frame(minWidth: 200, idealWidth: 300, minHeight: 300)
+                        .frame(minWidth: 200, idealWidth: 450, minHeight: 300, idealHeight: 400)
                         .padding(20)
                 }
             }
         }
-        .frame(minWidth: 400, minHeight: 300)
+        .frame(minWidth: 600, minHeight: 400)
     }
 }
 

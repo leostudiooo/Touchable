@@ -48,7 +48,7 @@ struct PlottingView: View {
             .chartXAxis {
                 AxisMarks(position: .bottom)
             }
-            .frame(height: 150)
+            .frame(minHeight: 150)
             .overlay(alignment: .topLeading) {
                 Text("Pressure")
                     .font(.caption)
@@ -56,53 +56,68 @@ struct PlottingView: View {
             }
             
             // Movement Plot
-            Chart {
-                ForEach(trackpadListener.dataPoints) { point in
-                    LineMark(
-                        x: .value("Sample", point.id),
-                        y: .value("X Movement", point.xDelta)
-                    )
-                    .foregroundStyle(.green)
-                
-                    LineMark(
-                        x: .value("Sample", point.id),
-                        y: .value("Y Movement", point.yDelta)
-                    )
-                    .foregroundStyle(.red)
-                }
-            }
-            .chartYScale(domain: movementDomain)
-            .chartXScale(domain: xDomain)
-            .chartYAxis {
-                AxisMarks(position: .leading)
-            }
-            .chartXAxis {
-                AxisMarks(position: .bottom)
-            }
-            .frame(height: 150)
-            .overlay(alignment: .topLeading) {
-                HStack(spacing: 10) {
-                    HStack(spacing: 4) {
-                        Circle()
-                            .fill(.green)
-                            .frame(width: 8, height: 8)
-                        Text("X Movement")
-                    }
-                    HStack(spacing: 4) {
-                        Circle()
-                            .fill(.red)
-                            .frame(width: 8, height: 8)
-                        Text("Y Movement")
+            HStack(spacing: 10) {
+                Chart {
+                    ForEach(trackpadListener.dataPoints) { point in
+                        LineMark(
+                            x: .value("Sample", point.id),
+                            y: .value("X Movement", point.xDelta)
+                        )
+                        .foregroundStyle(.green)
                     }
                 }
-                .font(.caption)
-                .padding(4)
+                .chartYScale(domain: movementDomain)
+                .chartXScale(domain: xDomain)
+                .chartYAxis {
+                    AxisMarks(position: .leading)
+                }
+                .chartXAxis {
+                    AxisMarks(position: .bottom)
+                }
+                .frame(idealWidth: 200, minHeight: 150)
+                .overlay(alignment: .topLeading) {
+                        HStack(spacing: 4) {
+                            Circle()
+                                .fill(.green)
+                                .frame(width: 8, height: 8)
+                            Text("X Movement")
+                        }
+                    .font(.caption)
+                    .padding(4)
+                }
+                Chart {
+                    ForEach(trackpadListener.dataPoints) { point in
+                        LineMark(
+                            x: .value("Sample", point.id),
+                            y: .value("Y Movement", point.yDelta)
+                        )
+                        .foregroundStyle(.red)
+                    }
+                }
+                .chartYScale(domain: movementDomain)
+                .chartXScale(domain: xDomain)
+                .chartYAxis {
+                    AxisMarks(position: .leading)
+                }
+                .chartXAxis {
+                    AxisMarks(position: .bottom)
+                }
+                .frame(idealWidth: 200, minHeight: 150)
+                .overlay(alignment: .topLeading) {
+                        HStack(spacing: 4) {
+                            Circle()
+                                .fill(.red)
+                                .frame(width: 8, height: 8)
+                            Text("Y Movement")
+                        }
+                    .font(.caption)
+                    .padding(4)
+                }
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
 #Preview {
-    PlottingView(trackpadListener: TrackpadListener())
+    PlottingView(trackpadListener: TrackpadListener()).padding(20)
 }
